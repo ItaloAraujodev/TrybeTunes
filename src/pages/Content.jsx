@@ -1,29 +1,45 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Login from './Login';
-import Search from './Search';
-import Album from './Album';
-import Profile from './Profile';
-import ProfileEdit from './ProfileEdit';
-import NotFound from './NotFound';
-import Favorites from './Favorites';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class Content extends React.Component {
   render() {
+    const { data, input } = this.props;
     return (
       <div>
-        <Switch>
-          <Route exact path="/" component={ Login } />
-          <Route path="/search" component={ Search } />
-          <Route path="/album" component={ Album } />
-          <Route path="/profile/edit" component={ ProfileEdit } />
-          <Route path="/profile" component={ Profile } />
-          <Route path="/favorites" component={ Favorites } />
-          <Route path="*" component={ NotFound } />
-        </Switch>
+        {data.length === 0 ? (
+          <h4>Nenhum álbum foi encontrado</h4>
+        ) : (
+          <>
+            <div>
+              <h3>
+                Resultado de álbuns de:
+                {' '}
+                { input }
+              </h3>
+            </div>
+            <ul>
+              {data.map((item) => (
+                <li key={ item.collectionId }>
+                  <Link
+                    to={ `/album/${item.collectionId}` }
+                    data-testid={ `link-to-album-${item.collectionId}` }
+                  >
+                    {item.collectionName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.string.isRequired,
+  input: PropTypes.string.isRequired,
+};
 
 export default Content;
