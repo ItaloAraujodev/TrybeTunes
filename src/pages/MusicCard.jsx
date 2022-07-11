@@ -1,59 +1,68 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
-import Loading from './Loading';
 
 class MusicCard extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      loading: false,
-      favotirs: {},
-      check: false,
+      validation: false,
     };
   }
 
-  onInputChecked = async () => {
+  componentDidMount() {
+    this.checkedValid();
+  }
+
+  /*   onInputChecked = async () => {
     const { favotirs } = this.state;
     this.setState({ loading: true });
     const song = await addSong(favotirs);
     this.setState({
       favotirs: song,
-      loading: false,
-      check: !check.value,
+      chec: false,
     });
-  };
+  }; */
+
+  checkedValid = () => {
+    const { check } = this.props;
+    this.setState({ validation: check });
+  }
+
+  musicAdd = async ({ target }, data) => {
+    const { addSongFavorite } = this.props;
+    const { checked } = target;
+    this.setState({ validation: checked });
+    if (checked) {
+      addSongFavorite(data);
+    }
+  }
 
   render() {
     const { album } = this.props;
-    const { loading, check } = this.state;
+    const { validation } = this.state;
     return (
       <div>
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
-            <p>{album.trackName}</p>
-            <audio data-testid="audio-component" src="{previewUrl}" controls>
-              <track kind="captions" />
-              O seu navegador não suporta o elemento
-              {' '}
-              <code>audio</code>
-            </audio>
+        <div>
+          <p>{album.trackName}</p>
+          <audio data-testid="audio-component" src="{previewUrl}" controls>
+            <track kind="captions" />
+            O seu navegador não suporta o elemento
+            {' '}
+            <code>audio</code>
+          </audio>
 
-            <label htmlFor="check">
-              Favorita
-              <input
-                id="check"
-                data-testid={ `checkbox-music-${album.trackId}` }
-                type="checkbox"
-                checked={ check }
-                onClick={ this.onInputChecked }
-              />
-            </label>
-          </div>
-        )}
+          <label htmlFor="check">
+            Favorita
+            <input
+              id="check"
+              data-testid={ `checkbox-music-${album.trackId}` }
+              type="checkbox"
+              onChange={ (event) => this.musicAdd(event, album) }
+              checked={ validation }
+            />
+          </label>
+        </div>
       </div>
     );
   }

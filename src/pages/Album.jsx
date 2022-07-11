@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Header from '../Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from './MusicCard';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import Loading from './Loading';
 
 class Album extends React.Component {
   constructor() {
@@ -11,11 +13,24 @@ class Album extends React.Component {
       name: '',
       collection: '',
       data: [],
+      favoriteSongs: [],
+      loading: false,
     };
   }
 
   componentDidMount() {
     this.spotyAPI();
+    this.addSongFavorite();
+  }
+
+  addSongFavorite = (obj) => {
+    this.setState({ loading: true }, async () => {
+      await addSong(obj);
+      const fov = await getFavoriteSongs();
+      this.setState((prev) => (
+        { favoriteSongs: [...prev.favoriteSongs, ...fov], loading: false }
+      ));
+    });
   }
 
   spotyAPI = async () => {
@@ -29,16 +44,30 @@ class Album extends React.Component {
     });
   };
 
+  valid = (item) => {
+    const { favoriteSongs } = this.state;
+    return favoriteSongs.some(({ trackId }) => trackId === item.trackId);
+  }
+
   render() {
-    const { data, collection, name } = this.state;
+    const { data, collection, name, loading } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
-        <p data-testid="album-name">{collection}</p>
-        <p data-testid="artist-name">{name}</p>
-        {data.map((item, index) => (
-          index > 0 ? <MusicCard key={ index } album={ item } /> : null
-        ))}
+        { loading ? <Loading /> : (
+          <>
+            <p data-testid="album-name">{collection}</p>
+            <p data-testid="artist-name">{name}</p>
+            {data.map((item, index) => (
+              index > 0 ? <MusicCard
+                key={ index }
+                album={ item }
+                addSongFavorite={ this.addSongFavorite }
+                check={ this.valid(item) }
+              /> : null
+            ))}
+          </>
+        ) }
       </div>
     );
   }
