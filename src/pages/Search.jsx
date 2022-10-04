@@ -3,6 +3,7 @@ import Header from '../Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Content from './Content';
 import Loading from './Loading';
+import '../css/search.css';
 
 class Search extends React.Component {
   constructor() {
@@ -43,7 +44,7 @@ class Search extends React.Component {
   render() {
     const { dissabled, input, loading, album, array, input2 } = this.state;
     return (
-      <div data-testid="page-search">
+      <div data-testid="page-search" className="container">
         <Header />
         {loading ? (
           <Loading />

@@ -54,7 +54,6 @@ class App extends React.Component {
         {loading ? <Loading /> : null }
         {search ? <Redirect to="/search" /> : null}
         <div>
-          <p>TrybeTunes</p>
           <Switch>
             <Route
               exact

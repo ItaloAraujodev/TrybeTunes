@@ -1,0 +1,57 @@
+.container {
+  border: 1px solid red;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.aside {
+  border: 1px solid blue;
+  height: 100%;
+  width: 35vh;
+}
+
+.logo-search {
+  margin: 50px 50px;
+  padding: 10px;
+}
+
+.logo-search h2 {
+  color: #00d5e2;
+  font-size: 60px;
+  font-style: italic;
+}
+
+.logo-search span {
+  color: #003be5;
+  display: block;
+  font-weight: 100;
+  margin-left: 50px;
+  margin-top: -15px;
+}
+
+.logo-search img {
+  height: 60px;
+  left: 200px;
+  position: absolute;
+  top: 60px;
+  width: 60px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 16px;
+  letter-spacing: 0.03em;
+  text-transform: capitalize;
+}
+
+.links span {
+  color: #444955;
+  margin-top: 30px;
+}
+
